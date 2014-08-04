@@ -1,25 +1,14 @@
 var express = require('express');
+var spawn = require('child_process').spawn;
 var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res) {
-  spawn('git', ['pull']);
-  child.kill();
-  startApp();
-  res.send('ok.');
+  var child = spawn('git', ['pull']);
+  child.on('exit', function(code) {
+    res.send('git pulled, restarting now.');
+    process.exit(1);
+  });
 });
-
-function startApp()
-{
-    child = spawn('node', ['app.js']);
-    child.stdout.setEncoding('utf8');
-    child.stdout.on('data', function (data) {
-        var str = data.toString()
-        console.log(str);
-    });
-    child.on('close', function (code) {
-        console.log('process exit code ' + code);
-    });
-}
 
 module.exports = router;
