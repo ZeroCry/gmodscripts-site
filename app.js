@@ -13,7 +13,7 @@ var bodyParser = require('body-parser');
 var RedisStore = require('connect-redis')(expressSession);
 var redis = require("redis").createClient();
 var passport = require('passport');
-var SteamStrategy = require('./node_modules/passport-steam').Strategy;
+var SteamStrategy = require('passport-steam').Strategy;
 
 var app = express();
 
