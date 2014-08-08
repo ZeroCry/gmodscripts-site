@@ -1,3 +1,6 @@
+//MAKE SURE YOU SET AN API KEY IN PASSPORT.USE
+
+
 var config = require('./config');
 
 var express = require('express');
@@ -51,7 +54,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new SteamStrategy({
         returnURL: "http://localhost:3000/account/auth/steam/return",
         realm: 'http://localhost:3000/',
-        apiKey: '0CC8B6F6258E29E0256B22626F95106C'
+        apiKey: 'APIKEYPLS'
     },
     function(ident, profile, done) {
         process.nextTick(function() {
