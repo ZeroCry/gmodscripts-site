@@ -52,8 +52,8 @@ passport.deserializeUser(function(obj, done) {
 });
 
 passport.use(new SteamStrategy({
-        returnURL: "http://localhost:3000/account/auth/steam/return",
-        realm: 'http://localhost:3000/',
+        returnURL: "http://75.180.14.99:3000/account/auth/steam/return", //change to localhost for LOCAL testing, then revert to 75.180.14.99 for the build server
+        realm: 'http://75.180.14.99:3000/', //change to localhost for LOCAL testing, then revert to 75.180.14.99 for the build server
         apiKey: 'APIKEYPLS'
     },
     function(ident, profile, done) {
