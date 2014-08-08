@@ -1,3 +1,6 @@
+//MAKE SURE YOU SET AN API KEY IN PASSPORT.USE
+
+
 var config = require('./config');
 
 var express = require('express');
@@ -8,6 +11,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var RedisStore = require('connect-redis')(expressSession);
+var redis = require("redis").createClient();
+var passport = require('passport');
+var SteamStrategy = require('passport-steam').Strategy;
 
 var app = express();
 
@@ -21,6 +27,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(expressSession({
+  resave: true,
+  saveUninitialized: true,
   store: new RedisStore({
     host: config.redis.host,
     port: config.redis.port,
@@ -31,6 +39,41 @@ app.use(expressSession({
 }));
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+    done(null, obj);
+});
+
+passport.use(new SteamStrategy({
+        returnURL: "http://localhost:3000/account/auth/steam/return",
+        realm: 'http://localhost:3000/',
+        apiKey: 'APIKEYPLS'
+    },
+    function(ident, profile, done) {
+        process.nextTick(function() {
+            console.log("STUFF:");
+            console.log(profile);
+
+            var idPts = ident.split("/");
+            var id = idPts[idPts.length - 1];
+            profile.identifier = id;
+
+            return done(null, profile);
+        });
+    }
+));
+
+function IsAuthed(req, res, next) {
+    if (req.isAuthenticated()) { return next(); }
+    res.reddirect('/account/login');
+}
 
 // routing
 require("./routes.js")(app);

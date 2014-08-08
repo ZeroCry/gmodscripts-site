@@ -26,3 +26,7 @@ block content
 					a(href='/account/settings') Settings
 				li
 					a(href='/account/scripts') My Scripts
+	if(typeof user !== "undefined")
+		h2 You're already logged in, #{user.identifier} !
+	else
+		a(href='/account/auth/steamlogin') Sign in with Steam!

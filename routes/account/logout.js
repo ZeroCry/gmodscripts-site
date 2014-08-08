@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/', function(req, res) {
-	res.render('logout', { title: "Logout" });
+	req.logout();
+	res.redirect('/');
 });
 
 module.exports = router;
