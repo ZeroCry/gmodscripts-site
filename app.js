@@ -1,13 +1,13 @@
+var config = require('./config');
+
 var express = require('express');
+var expressSession = require('express-session');
 var path = require('path');
 var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
-var routes = require('./routes/index');
-var users = require('./routes/users');
-var update = require('./routes/update');
+var RedisStore = require('connect-redis')(expressSession);
 
 var app = express();
 
@@ -20,6 +20,15 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
+app.use(expressSession({
+  store: new RedisStore({
+    host: config.redis.host,
+    port: config.redis.port,
+    db: config.redis.db,
+    pass: config.redis.pass
+  }),
+  secret: config.redis.secret
+}));
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 

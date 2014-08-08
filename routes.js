@@ -1,28 +1,21 @@
-/*  All extra routing goes below this comment, example:
+var debug = require('debug')('routes');
 
-	app.get("/test", function (req, res) {
-		res.send('test');
-	});
-*/
-
-// Routing
 module.exports = function(app) {
-	var requireDir = require('require-dir');
-	var routes = requireDir('./routes', {recurse: true});
+	var routes = require('require-dir')('./routes', {recurse: true});
 
-	// Include index page
-	app.use("/", routes['index']);
-
-	// Recurse through routes and include them
 	function useOrRecurse(routes, path) {
 		if(typeof routes === 'object')
 			Object.keys(routes).forEach(function(key) {
-				useOrRecurse(routes[key], path + key + '/');
+        if(key === 'index' && typeof routes[key] === 'function')
+          useOrRecurse(routes[key], path + "/");
+        else
+          useOrRecurse(routes[key], path + "/" + key);
 			});
-		else
+		else {
+      debug('using rout: ' + path);
 			app.use(path, routes);
+    }
 	}
 
-	// If you replace the / below with for example /pages/, all pages will be under /pages/
-	useOrRecurse(routes, "/");
-}
+	useOrRecurse(routes, "");
+};  
