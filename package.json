@@ -19,7 +19,8 @@
     "require-dir": "0.1.0",
     "connect-redis": "2.0.0",
     "passport": ">= 0.0.0",
-    "redis": "latest"
+    "redis": "latest",
+    "request": "2.40.0"
   }
 }
 
