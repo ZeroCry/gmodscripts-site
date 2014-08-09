@@ -4,7 +4,9 @@ var github = require('../github');
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  github.getDeps('philxyz', 'SeriousRP', 'master');
+  // Temporary (debug)
+  github.getDeps('gmodcoders', 'gmodscripts-site', 'master');
+
   res.render('index', { title: 'Express' });
 });
 
